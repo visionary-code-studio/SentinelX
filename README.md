@@ -1,4 +1,4 @@
-# SentinelX
+  # SentinelX
 SentinelX is a cybersecurity-first industrial monitoring platform designed to help factories, OT/ICS environments, and enterprise security teams detect threats early, visualize risk, and respond faster. The product combines AI-driven anomaly detection, centralized security monitoring, and executive-ready incident visibility.                                                                                                   
 # 🚀 SentinelX
 
@@ -38,6 +38,8 @@ Surfaces relevant threat data, emerging indicators, malicious IPs, campaign sign
 ### 5) Predictive Attack Analytics
 Uses AI-assisted risk modeling to forecast likely attack paths, exposure trends, and high-priority assets before incidents escalate.
 
+### 6) AI CHATBOT
+AI Assistant help Security Operations Managers,SOC Analysts,CISOs / CIOs,Plant Operations Leaders,Industrial Security Teams,Critical Infrastructure Operators to identify the industrial threats and analyse accordingly.
 ---
 
 ## 🧭 Product Highlights
@@ -60,7 +62,8 @@ Uses AI-assisted risk modeling to forecast likely attack paths, exposure trends,
 > Add your screenshots here for a stronger GitHub presentation.
 
 | Landing Page | Dashboard Preview |
-| `./Landing_Page.png` | `./assets/dashboard-preview.png` |
+
+| `<img width="1352" height="634" alt="Landing_Page" src="https://github.com/user-attachments/assets/b113811d-7fc4-4b75-9815-dcf374b14597" />` |                                                                                                                      | `./assets/dashboard-preview.png` |
 
 ---
 
