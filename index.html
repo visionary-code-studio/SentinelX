@@ -1,0 +1,3443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="SentinelX — AI-powered industrial cybersecurity platform for OT/ICS environments, IoT monitoring, and enterprise SOC teams." />
+  <title>SentinelX — AI-Powered Industrial Cybersecurity</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --bg: #050201;
+      --bg2: #0a0705;
+      --bg3: #120e0a;
+      --amber: #E19746;
+      --amber2: #B64018;
+      --amber3: #EAE6E2;
+      --teal: #669399;
+      --warm: #BBB8AD;
+      --dark-red: #5C170B;
+      --card-bg: rgba(20, 14, 10, 0.85);
+      --glass: rgba(225, 151, 70, 0.06);
+      --border: rgba(225, 151, 70, 0.15);
+      --border2: rgba(102, 147, 153, 0.2);
+      --text: #EAE6E2;
+      --text2: #BBB8AD;
+      --text3: #535656;
+      --glow: rgba(225, 151, 70, 0.3);
+      --red-glow: rgba(182, 64, 24, 0.4);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(5, 2, 1, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px)
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--amber);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none
+    }
+
+    .nav-logo img {
+      height: 32px;
+      width: auto;
+      border-radius: 4px
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem
+    }
+
+    .nav-links a {
+      color: var(--text2);
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: pointer;
+      letter-spacing: 0.02em
+    }
+
+    .nav-links a:hover {
+      color: var(--amber)
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.03em
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--amber);
+      color: var(--amber)
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: #0a0705
+    }
+
+    .btn-primary:hover {
+      background: #F5A84F;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(225, 151, 70, 0.3)
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--amber2);
+      color: var(--amber)
+    }
+
+    .btn-outline:hover {
+      background: rgba(182, 64, 24, 0.15)
+    }
+
+    .btn-lg {
+      padding: 12px 28px;
+      font-size: 0.95rem
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: var(--text2);
+      transition: all 0.3s;
+      border-radius: 1px
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 4px)
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -4px)
+    }
+
+    /* PAGES */
+    .page {
+      display: none;
+      padding-top: 64px;
+      min-height: 100vh
+    }
+
+    .page.active {
+      display: block
+    }
+
+    /* HERO */
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 3rem 2rem;
+      text-align: center
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(225, 151, 70, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(225, 151, 70, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(182, 64, 24, 0.25), transparent 70%);
+      pointer-events: none;
+      animation: glowPulse 6s ease-in-out infinite
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        opacity: 0.8;
+        transform: translateX(-50%) scale(1)
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.15)
+      }
+    }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(182, 64, 24, 0.08) 0%, transparent 40%, rgba(102, 147, 153, 0.05) 70%, transparent 100%);
+      animation: gradientShift 12s ease-in-out infinite;
+      pointer-events: none
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 0%
+      }
+
+      50% {
+        background-position: 100% 100%
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(225, 151, 70, 0.1);
+      border: 1px solid rgba(225, 151, 70, 0.25);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      color: var(--amber);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      animation: pulse 2s infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.5)
+      }
+    }
+
+    .hero-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px rgba(225, 151, 70, 0.3))
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+      max-width: 800px;
+      position: relative;
+      z-index: 1
+    }
+
+    .hero h1 span {
+      color: var(--amber)
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text2);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 1
+    }
+
+    /* THREAT VISUAL */
+    .hero-visual {
+      margin-top: 3rem;
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      z-index: 1
+    }
+
+    .threat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem
+    }
+
+    .threat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.6s ease both;
+      transition: all 0.3s
+    }
+
+    .threat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      border-color: rgba(225, 151, 70, 0.3)
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .threat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px
+    }
+
+    .threat-card.critical::before {
+      background: linear-gradient(90deg, #B64018, #E19746)
+    }
+
+    .threat-card.high::before {
+      background: linear-gradient(90deg, #E19746, #669399)
+    }
+
+    .threat-card.medium::before {
+      background: linear-gradient(90deg, #669399, transparent)
+    }
+
+    .threat-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px
+    }
+
+    .threat-card.critical .threat-label {
+      color: #E05533
+    }
+
+    .threat-card.high .threat-label {
+      color: var(--amber)
+    }
+
+    .threat-card.medium .threat-label {
+      color: var(--teal)
+    }
+
+    .threat-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-family: 'Space Mono', monospace
+    }
+
+    .threat-meta {
+      font-size: 0.7rem;
+      color: var(--text3)
+    }
+
+    .score-ring {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      float: right;
+      margin-top: -4px
+    }
+
+    .score-ring.c {
+      background: rgba(182, 64, 24, 0.2);
+      border: 1.5px solid #B64018;
+      color: #E05533
+    }
+
+    .score-ring.h {
+      background: rgba(225, 151, 70, 0.15);
+      border: 1.5px solid var(--amber);
+      color: var(--amber)
+    }
+
+    .score-ring.m {
+      background: rgba(102, 147, 153, 0.15);
+      border: 1.5px solid var(--teal);
+      color: var(--teal)
+    }
+
+    /* TRUST STRIP */
+    .trust-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      background: var(--bg2)
+    }
+
+    .trust-headline {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem
+    }
+
+    .trust-headline::before,
+    .trust-headline::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--border2)
+    }
+
+    .trust-metrics {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap
+    }
+
+    .metric-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .metric-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--amber)
+    }
+
+    .metric-lbl {
+      font-size: 0.75rem;
+      color: var(--text3);
+      line-height: 1.3
+    }
+
+    .metric-lbl strong {
+      display: block;
+      color: var(--text2);
+      font-size: 0.82rem
+    }
+
+    .strip-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border)
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .section-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.75rem
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem
+    }
+
+    .section-sub {
+      color: var(--text2);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 560px
+    }
+
+    /* PROBLEM */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem
+    }
+
+    .prob-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: all 0.25s
+    }
+
+    .prob-card:hover {
+      border-color: rgba(225, 151, 70, 0.3);
+      transform: translateY(-2px)
+    }
+
+    .prob-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(182, 64, 24, 0.15);
+      border: 1px solid rgba(182, 64, 24, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem
+    }
+
+    .prob-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem
+    }
+
+    .prob-card p {
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.6
+    }
+
+    /* MODULES */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem
+    }
+
+    .mod-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden
+    }
+
+    .mod-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(225, 151, 70, 0.1)
+    }
+
+    .mod-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(225, 151, 70, 0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.3s
+    }
+
+    .mod-card:hover::after {
+      opacity: 1
+    }
+
+    .mod-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text3);
+      margin-bottom: 0.75rem
+    }
+
+    .mod-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem
+    }
+
+    .mod-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--text)
+    }
+
+    .mod-card p {
+      font-size: 0.78rem;
+      color: var(--text2);
+      line-height: 1.55
+    }
+
+    /* SCOPE */
+    .scope-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .accord {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 0.75rem
+    }
+
+    .accord-header {
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: var(--card-bg);
+      transition: background 0.2s
+    }
+
+    .accord-header:hover {
+      background: rgba(225, 151, 70, 0.05)
+    }
+
+    .accord-header h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .accord-arrow {
+      color: var(--amber);
+      font-size: 1rem;
+      transition: transform 0.3s
+    }
+
+    .accord-body {
+      display: none;
+      padding: 1rem 1.25rem;
+      background: rgba(5, 2, 1, 0.5);
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.65
+    }
+
+    .accord-body.open {
+      display: block
+    }
+
+    .accord-arrow.open {
+      transform: rotate(180deg)
+    }
+
+    /* EPICS */
+    .epics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem
+    }
+
+    .epic-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: border-color 0.25s
+    }
+
+    .epic-card:hover {
+      border-color: rgba(225, 151, 70, 0.3)
+    }
+
+    .epic-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.75rem
+    }
+
+    .epic-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--amber);
+      background: rgba(225, 151, 70, 0.1);
+      border: 1px solid rgba(225, 151, 70, 0.2);
+      border-radius: 4px;
+      padding: 2px 8px
+    }
+
+    .epic-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700
+    }
+
+    .story-list {
+      list-style: none
+    }
+
+    .story-list li {
+      font-size: 0.78rem;
+      color: var(--text2);
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      line-height: 1.5
+    }
+
+    .story-list li:last-child {
+      border: none
+    }
+
+    .story-list li::before {
+      content: '→ ';
+      color: var(--amber);
+      font-size: 0.65rem
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin-top: 2rem
+    }
+
+    .about-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem
+    }
+
+    .about-stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: border-color 0.25s
+    }
+
+    .about-stat:hover {
+      border-color: rgba(225, 151, 70, 0.3)
+    }
+
+    .about-stat-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      color: var(--amber);
+      font-weight: 700
+    }
+
+    .about-stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .team-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem
+    }
+
+    .tag {
+      background: rgba(102, 147, 153, 0.1);
+      border: 1px solid rgba(102, 147, 153, 0.2);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      color: var(--teal);
+      font-weight: 500
+    }
+
+    /* BOOKING */
+    .booking-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border)
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem
+    }
+
+    .form-field.full {
+      grid-column: 1/-1
+    }
+
+    .form-field label {
+      font-size: 0.78rem;
+      color: var(--text2);
+      font-weight: 500;
+      letter-spacing: 0.02em
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: rgba(10, 7, 5, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--amber)
+    }
+
+    .form-field select {
+      appearance: none;
+      cursor: pointer
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 80px
+    }
+
+    .form-note {
+      font-size: 0.73rem;
+      color: var(--text3);
+      margin-top: 0.75rem
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 2.5rem;
+      background: rgba(102, 147, 153, 0.1);
+      border: 1px solid rgba(102, 147, 153, 0.3);
+      border-radius: 10px;
+      margin-top: 1rem
+    }
+
+    .success-msg.show {
+      display: block;
+      animation: fadeUp 0.4s ease
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .success-msg h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      color: var(--teal);
+      margin-bottom: 0.5rem
+    }
+
+    .success-msg p {
+      font-size: 0.85rem;
+      color: var(--text2)
+    }
+
+    .redirect-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(102, 147, 153, 0.2);
+      border-radius: 4px;
+      margin-top: 1rem;
+      overflow: hidden
+    }
+
+    .redirect-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+      border-radius: 4px;
+      width: 0;
+      transition: width 3s linear
+    }
+
+    .redirect-text {
+      font-size: 0.78rem;
+      color: var(--teal);
+      margin-top: 0.5rem;
+      font-family: 'Space Mono', monospace
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem
+    }
+
+    .footer-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--amber)
+    }
+
+    .footer-brand-logo img {
+      height: 28px;
+      border-radius: 4px
+    }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: var(--text3);
+      line-height: 1.65;
+      max-width: 280px
+    }
+
+    .footer-col h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text3);
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: color 0.2s
+    }
+
+    .footer-col a:hover {
+      color: var(--amber)
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem
+    }
+
+    .footer-bottom p {
+      font-size: 0.73rem;
+      color: var(--text3)
+    }
+
+    .platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(182, 64, 24, 0.1);
+      border: 1px solid rgba(182, 64, 24, 0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      color: var(--amber2);
+      font-weight: 600;
+      letter-spacing: 0.05em
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(5, 2, 1, 0.92);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px)
+    }
+
+    .modal-overlay.show {
+      display: flex
+    }
+
+    .modal {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      animation: modalIn 0.25s ease
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0)
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text3);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 4px
+    }
+
+    .modal-close:hover {
+      color: var(--text)
+    }
+
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem
+    }
+
+    .modal-sub {
+      font-size: 0.82rem;
+      color: var(--text2);
+      margin-bottom: 1.5rem
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem
+    }
+
+    .auth-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem
+    }
+
+    .auth-field label {
+      font-size: 0.78rem;
+      color: var(--text2);
+      font-weight: 500
+    }
+
+    .auth-field input,
+    .auth-field select {
+      background: rgba(10, 7, 5, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%
+    }
+
+    .auth-field input:focus,
+    .auth-field select:focus {
+      border-color: var(--amber)
+    }
+
+    .auth-toggle {
+      font-size: 0.78rem;
+      color: var(--text3);
+      text-align: center;
+      margin-top: 0.5rem
+    }
+
+    .auth-toggle a {
+      color: var(--amber);
+      cursor: pointer;
+      text-decoration: none
+    }
+
+    .modal-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.5rem 0
+    }
+
+    .modal-divider span {
+      font-size: 0.72rem;
+      color: var(--text3)
+    }
+
+    .modal-divider::before,
+    .modal-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border)
+    }
+
+    /* DASHBOARD PAGE */
+    .dash-header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem
+    }
+
+    .dash-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .dash-title img {
+      height: 24px;
+      border-radius: 3px
+    }
+
+    .dash-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--teal)
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s infinite
+    }
+
+    .dash-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 129px)
+    }
+
+    .sidebar {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 1rem
+    }
+
+    .sidebar-section {
+      margin-bottom: 1.5rem
+    }
+
+    .sidebar-section h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 0.5rem;
+      padding: 0 0.5rem
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif
+    }
+
+    .sidebar-item:hover {
+      background: rgba(225, 151, 70, 0.08);
+      color: var(--amber)
+    }
+
+    .sidebar-item.active {
+      background: rgba(225, 151, 70, 0.12);
+      color: var(--amber);
+      border-left: 2px solid var(--amber)
+    }
+
+    .sidebar-item-icon {
+      font-size: 0.9rem;
+      width: 18px
+    }
+
+    .sidebar-badge {
+      margin-left: auto;
+      background: rgba(182, 64, 24, 0.2);
+      border: 1px solid rgba(182, 64, 24, 0.4);
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-size: 0.65rem;
+      color: #E05533;
+      font-weight: 700
+    }
+
+    .dash-content {
+      padding: 1.5rem;
+      overflow-y: auto
+    }
+
+    .dash-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      transition: border-color 0.3s
+    }
+
+    .kpi-card:hover {
+      border-color: rgba(225, 151, 70, 0.3)
+    }
+
+    .kpi-label {
+      font-size: 0.7rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem
+    }
+
+    .kpi-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.3s
+    }
+
+    .kpi-val.amber {
+      color: var(--amber)
+    }
+
+    .kpi-val.red {
+      color: #E05533
+    }
+
+    .kpi-val.teal {
+      color: var(--teal)
+    }
+
+    .kpi-sub {
+      font-size: 0.7rem;
+      color: var(--text3);
+      margin-top: 4px
+    }
+
+    .kpi-sub.up {
+      color: #7EC8A0
+    }
+
+    .kpi-sub.down {
+      color: #E05533
+    }
+
+    .dash-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem
+    }
+
+    .panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .panel-title span {
+      font-size: 0.68rem;
+      color: var(--text3);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400
+    }
+
+    .incident-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 4px
+    }
+
+    .incident-item:hover {
+      background: rgba(225, 151, 70, 0.03)
+    }
+
+    .incident-item:last-child {
+      border: none
+    }
+
+    .severity-badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .sev-critical {
+      background: rgba(182, 64, 24, 0.2);
+      border: 1px solid rgba(182, 64, 24, 0.4);
+      color: #E05533
+    }
+
+    .sev-high {
+      background: rgba(225, 151, 70, 0.15);
+      border: 1px solid rgba(225, 151, 70, 0.3);
+      color: var(--amber)
+    }
+
+    .sev-medium {
+      background: rgba(102, 147, 153, 0.15);
+      border: 1px solid rgba(102, 147, 153, 0.3);
+      color: var(--teal)
+    }
+
+    .sev-low {
+      background: rgba(83, 86, 86, 0.2);
+      border: 1px solid rgba(83, 86, 86, 0.3);
+      color: var(--text3)
+    }
+
+    .incident-info h4 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .incident-info p {
+      font-size: 0.7rem;
+      color: var(--text3);
+      margin-top: 2px;
+      font-family: 'Space Mono', monospace
+    }
+
+    .incident-detail {
+      display: none;
+      background: rgba(5, 2, 1, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      animation: fadeUp 0.3s ease
+    }
+
+    .incident-detail.open {
+      display: block
+    }
+
+    .incident-detail h5 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--amber);
+      margin-bottom: 0.4rem
+    }
+
+    .incident-detail p {
+      font-size: 0.75rem;
+      color: var(--text2);
+      line-height: 1.6
+    }
+
+    .incident-detail ul {
+      list-style: none;
+      margin-top: 0.5rem
+    }
+
+    .incident-detail ul li {
+      font-size: 0.72rem;
+      color: var(--text2);
+      padding: 3px 0
+    }
+
+    .incident-detail ul li::before {
+      content: '• ';
+      color: var(--amber)
+    }
+
+    .device-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem
+    }
+
+    .device-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      background: rgba(5, 2, 1, 0.5);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    .device-name {
+      font-size: 0.78rem;
+      color: var(--text);
+      font-family: 'Space Mono', monospace
+    }
+
+    .device-status {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 4px
+    }
+
+    .ds-ok {
+      background: rgba(126, 200, 160, 0.1);
+      color: #7EC8A0
+    }
+
+    .ds-warn {
+      background: rgba(225, 151, 70, 0.1);
+      color: var(--amber)
+    }
+
+    .ds-critical {
+      background: rgba(224, 85, 51, 0.1);
+      color: #E05533
+    }
+
+    /* IOT */
+    .iot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem
+    }
+
+    .iot-device {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      transition: all 0.2s
+    }
+
+    .iot-device:hover {
+      border-color: var(--amber);
+      transform: translateY(-2px)
+    }
+
+    .iot-device-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem
+    }
+
+    .iot-device-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'Space Mono', monospace
+    }
+
+    .iot-score {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace
+    }
+
+    .iot-vulns {
+      list-style: none
+    }
+
+    .iot-vulns li {
+      font-size: 0.72rem;
+      color: var(--text2);
+      padding: 3px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .iot-vulns li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .iot-vulns li.v-crit::before {
+      background: #E05533
+    }
+
+    .iot-vulns li.v-high::before {
+      background: var(--amber)
+    }
+
+    .iot-vulns li.v-med::before {
+      background: var(--teal)
+    }
+
+    /* NETWORK */
+    .network-vis {
+      background: rgba(5, 2, 1, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 1rem
+    }
+
+    .network-node {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: nodeFloat 4s ease-in-out infinite
+    }
+
+    @keyframes nodeFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0)
+      }
+
+      50% {
+        transform: translate(5px, -5px)
+      }
+    }
+
+    .net-center {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background: rgba(182, 64, 24, 0.3);
+      border: 2px solid var(--amber2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--amber);
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      z-index: 2
+    }
+
+    /* TERMS */
+    .terms-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem
+    }
+
+    .terms-content h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem
+    }
+
+    .terms-date {
+      font-size: 0.78rem;
+      color: var(--text3);
+      margin-bottom: 2rem
+    }
+
+    .terms-section {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem
+    }
+
+    .terms-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.02em
+    }
+
+    .terms-section p,
+    .terms-section li {
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.75;
+      margin-bottom: 0.4rem
+    }
+
+    .terms-section ul {
+      padding-left: 1.25rem
+    }
+
+    /* SCROLL ANIMATIONS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none
+    }
+
+    /* TICKER */
+    .ticker-bar {
+      background: rgba(182, 64, 24, 0.08);
+      border-top: 1px solid rgba(182, 64, 24, 0.2);
+      border-bottom: 1px solid rgba(182, 64, 24, 0.2);
+      overflow: hidden;
+      padding: 8px 0
+    }
+
+    .ticker-inner {
+      display: flex;
+      gap: 0;
+      animation: ticker 30s linear infinite;
+      width: max-content
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 2rem;
+      font-size: 0.72rem;
+      color: var(--text2);
+      font-family: 'Space Mono', monospace;
+      white-space: nowrap
+    }
+
+    .ticker-item .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%
+    }
+
+    @keyframes ticker {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* CHATBOT */
+    .chat-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--amber2), var(--amber));
+      border: none;
+      cursor: pointer;
+      z-index: 150;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 24px rgba(225, 151, 70, 0.4);
+      transition: all 0.3s;
+      animation: fabPulse 3s ease-in-out infinite
+    }
+
+    .chat-fab:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 32px rgba(225, 151, 70, 0.5)
+    }
+
+    @keyframes fabPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 24px rgba(225, 151, 70, 0.4)
+      }
+
+      50% {
+        box-shadow: 0 4px 32px rgba(225, 151, 70, 0.6), 0 0 0 8px rgba(225, 151, 70, 0.1)
+      }
+    }
+
+    .chat-panel {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 380px;
+      max-height: 520px;
+      background: rgba(18, 14, 10, 0.97);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+      animation: chatIn 0.3s ease
+    }
+
+    .chat-panel.open {
+      display: flex
+    }
+
+    @keyframes chatIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .chat-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .chat-header-info {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .chat-header-info .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--amber2), var(--amber));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem
+    }
+
+    .chat-header-info div h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif
+    }
+
+    .chat-header-info div p {
+      font-size: 0.68rem;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .chat-header-info div p::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--teal);
+      border-radius: 50%
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: var(--text3);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s
+    }
+
+    .chat-close:hover {
+      color: var(--text)
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 280px;
+      max-height: 340px
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 0.6rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      animation: msgIn 0.3s ease
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: rgba(225, 151, 70, 0.1);
+      border: 1px solid rgba(225, 151, 70, 0.15);
+      color: var(--text2)
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: rgba(102, 147, 153, 0.15);
+      border: 1px solid rgba(102, 147, 153, 0.2);
+      color: var(--text)
+    }
+
+    .chat-typing {
+      align-self: flex-start;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.75rem;
+      color: var(--text3);
+      display: none;
+      align-items: center;
+      gap: 4px
+    }
+
+    .chat-typing.show {
+      display: flex
+    }
+
+    .typing-dots span {
+      width: 5px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: inline-block;
+      animation: typingBounce 1.4s infinite
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s
+    }
+
+    @keyframes typingBounce {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0)
+      }
+
+      30% {
+        transform: translateY(-6px)
+      }
+    }
+
+    .chat-quick-replies {
+      padding: 0.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    .quick-reply {
+      background: rgba(225, 151, 70, 0.08);
+      border: 1px solid rgba(225, 151, 70, 0.2);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      color: var(--amber);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif
+    }
+
+    .quick-reply:hover {
+      background: rgba(225, 151, 70, 0.15);
+      border-color: var(--amber)
+    }
+
+    .chat-input-bar {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(10, 7, 5, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.2s
+    }
+
+    .chat-input:focus {
+      border-color: var(--amber)
+    }
+
+    .chat-send {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--amber);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      color: #0a0705;
+      flex-shrink: 0
+    }
+
+    .chat-send:hover {
+      background: #F5A84F;
+      transform: scale(1.05)
+    }
+
+    /* DASHBOARD NOTIFICATION TOAST */
+    .dash-toast {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: rgba(18, 14, 10, 0.97);
+      border: 1px solid rgba(182, 64, 24, 0.4);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      z-index: 160;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      animation: toastIn 0.4s ease
+    }
+
+    .dash-toast.show {
+      display: flex
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(40px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    .dash-toast-icon {
+      font-size: 1.2rem
+    }
+
+    .dash-toast-content h5 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .dash-toast-content p {
+      font-size: 0.7rem;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .dash-toast-close {
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(5, 2, 1, 0.97);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 1rem 2rem;
+        gap: 0.75rem;
+        backdrop-filter: blur(20px)
+      }
+
+      .nav-links.mobile-open {
+        display: flex
+      }
+
+      .hamburger {
+        display: flex
+      }
+
+      .chat-panel {
+        width: calc(100vw - 48px);
+        right: 24px
+      }
+    }
+
+    @media(max-width:700px) {
+
+      .threat-grid,
+      .problem-grid,
+      .modules-grid,
+      .about-grid,
+      .dash-layout,
+      .epics-grid,
+      .dash-kpi-grid,
+      .dash-panels,
+      .footer-top,
+      .iot-grid {
+        grid-template-columns: 1fr
+      }
+
+      .dash-layout {
+        grid-template-columns: 1fr
+      }
+
+      .sidebar {
+        display: none
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+
+      .trust-metrics {
+        gap: 1.5rem
+      }
+    }
+
+    /* DASHBOARD ENHANCEMENTS */
+    .dash-search {
+      background: rgba(10, 7, 5, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      padding: 6px 12px 6px 30px;
+      outline: none;
+      width: 180px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23BBB8AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      transition: border-color 0.2s, width 0.2s;
+    }
+
+    .dash-search:focus {
+      border-color: var(--amber);
+      width: 240px;
+    }
+
+    .dash-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(225, 151, 70, 0.08);
+      border: 1px solid rgba(225, 151, 70, 0.2);
+      padding: 4px 10px 4px 4px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .dash-profile-img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #0a0705;
+    }
+
+    .dash-profile-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* BLOCKCHAIN UI */
+    .bc-panel {
+      background: rgba(5, 2, 1, 0.6);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .bc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bc-ledger {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text2);
+      background: var(--bg2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 0.75rem;
+      height: 120px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .bc-hash {
+      color: var(--amber);
+      font-size: 0.65rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo" onclick="showPage('home')">
+      <img src="logo.png" alt="SentinelX"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+      <div
+        style="display:none;width:28px;height:28px;background:linear-gradient(135deg,var(--amber2),var(--amber));border-radius:6px;align-items:center;justify-content:center;font-size:14px">
+        ⬡</div>
+      SentinelX
+    </div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a onclick="showPage('home');closeMobileMenu()">Home</a>
+      <a onclick="scrollTo_('#about');closeMobileMenu()">About Us</a>
+      <a onclick="scrollTo_('#modules');closeMobileMenu()">Features</a>
+      <a onclick="scrollTo_('#scope');closeMobileMenu()">Scope & MVP</a>
+      <a onclick="scrollTo_('#booking');closeMobileMenu()">Book a Demo</a>
+      <a onclick="showPage('terms');closeMobileMenu()">Terms</a>
+      <a onclick="showPage('dashboard');closeMobileMenu()" style="color:var(--teal)">Platform ↗</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="showModal('signin')">Sign In</button>
+      <button class="btn btn-primary" onclick="showModal('register')">Register</button>
+    </div>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page active">
+
+    <!-- TICKER -->
+    <div class="ticker-bar" style="margin-top:64px">
+      <div class="ticker-inner" id="ticker"></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-gradient"></div>
+      <div class="hero-badge"><span class="pulse-dot"></span>AI-POWERED INDUSTRIAL CYBER DEFENSE</div>
+      <img src="logo.png" alt="SentinelX Shield" class="hero-logo" style="mix-blend-mode: screen;" onerror="this.style.display='none'" />
+      <h1>AI-Powered Industrial<br><span>Cybersecurity</span> for<br>Connected Operations</h1>
+      <p>SentinelX delivers AI-driven anomaly detection, centralized SOC monitoring, and executive-ready incident
+        visibility for OT/ICS environments and enterprise security teams.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="scrollTo_('#booking')">Book a Demo</button>
+        <button class="btn btn-ghost btn-lg" onclick="showModal('signin')">Sign In</button>
+        <button class="btn btn-outline btn-lg" onclick="showModal('register')">Register</button>
+      </div>
+
+      <div class="hero-visual">
+        <div class="threat-grid" id="threatCards"></div>
+      </div>
+    </section>
+
+    <!-- TRUST STRIP -->
+    <div class="trust-strip">
+      <div class="trust-headline">🛡️ Built for Industrial Security, Cloud Security, and Enterprise Monitoring</div>
+      <div class="trust-metrics">
+        <div class="metric-pill">
+          <div class="metric-val" id="cnt1">0</div>
+          <div class="metric-lbl"><strong>Threats Detected</strong>in simulation</div>
+        </div>
+        <div class="strip-divider"></div>
+        <div class="metric-pill">
+          <div class="metric-val" id="cnt2">0</div>
+          <div class="metric-lbl"><strong>Devices Monitored</strong>across OT/IoT</div>
+        </div>
+        <div class="strip-divider"></div>
+        <div class="metric-pill">
+          <div class="metric-val" id="cnt3">0</div>
+          <div class="metric-lbl"><strong>Mean Response</strong>in milliseconds</div>
+        </div>
+        <div class="strip-divider"></div>
+        <div class="metric-pill">
+          <div class="metric-val" id="cnt4">0</div>
+          <div class="metric-lbl"><strong>Risk Score</strong>baseline index</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <section class="section reveal" id="problem">
+      <div class="section-tag">The Challenge</div>
+      <h2 class="section-title">Industrial networks are<br>dangerously under-defended</h2>
+      <p class="section-sub">OT/ICS environments face unique threats — heterogeneous device ecosystems, noisy alert
+        signals, and critically short response windows.</p>
+      <div class="problem-grid">
+        <div class="prob-card">
+          <div class="prob-icon">⚡</div>
+          <h3>Complex Network Topology</h3>
+          <p>Industrial environments mix PLC, SCADA, ICS, and IoT devices across isolated segments, creating blind spots
+            that traditional tools miss.</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon">📡</div>
+          <h3>IoT Attack Surface</h3>
+          <p>Legacy IoT devices often run outdated firmware with hardcoded credentials, making them easy entry points
+            for lateral movement.</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon">🔔</div>
+          <h3>Alert Fatigue</h3>
+          <p>SOC teams drown in thousands of low-fidelity alerts daily. Without intelligent prioritization, critical
+            threats get buried.</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon">⏱</div>
+          <h3>Slow Manual Response</h3>
+          <p>Manual investigation and response cycles stretch from minutes to hours — far too slow for OT environments
+            where downtime costs thousands per second.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section class="section reveal" id="modules" style="padding-top:0">
+      <div class="section-tag">Platform Modules</div>
+      <h2 class="section-title">Five layers of<br>industrial security intelligence</h2>
+      <div class="modules-grid">
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">01 / 05</div>
+          <div class="mod-icon">🛡️</div>
+          <h3>Threat Detection Engine</h3>
+          <p>AI anomaly scoring using ML models trained on OT/IoT behavioral baselines. Flags deviations in real time.
+          </p>
+        </div>
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">02 / 05</div>
+          <div class="mod-icon">📊</div>
+          <h3>SOC Dashboard</h3>
+          <p>Unified security operations view with live incident feeds, severity heatmaps, and analyst workflow tools.
+          </p>
+        </div>
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">03 / 05</div>
+          <div class="mod-icon">📱</div>
+          <h3>IoT Risk Monitor</h3>
+          <p>Continuous vulnerability assessment across connected devices — firmware versions, open ports, misconfigs.
+          </p>
+        </div>
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">04 / 05</div>
+          <div class="mod-icon">⚠️</div>
+          <h3>Alert Prioritization</h3>
+          <p>ML-ranked alert queues with business impact scoring so your team focuses on what actually matters.</p>
+        </div>
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">05 / 05</div>
+          <div class="mod-icon">🔐</div>
+          <h3>Policy & Access Layer</h3>
+          <p>Role-based access controls, audit trails, and policy management for compliance and accountability.</p>
+        </div>
+        <div class="mod-card" onclick="showPage('dashboard')">
+          <div class="mod-num">BONUS</div>
+          <div class="mod-icon">🔮</div>
+          <h3>Predictive Attack Analytics</h3>
+          <p>Forecasts likely attack vectors based on current threat intelligence and device risk posture.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCOPE -->
+    <div class="scope-section" id="scope">
+      <section class="section reveal">
+        <div class="section-tag">Scope & MVP Definition</div>
+        <h2 class="section-title">What the prototype includes</h2>
+        <p class="section-sub" style="margin-bottom:1.5rem">Detailed scope for the SentinelX MVP — honest about
+          boundaries, demonstrably valuable within them.</p>
+
+        <div class="accord" onclick="toggleAccord(this)">
+          <div class="accord-header">
+            <h3>✅ MVP Includes</h3><span class="accord-arrow">▾</span>
+          </div>
+          <div class="accord-body">Home page with full product story • Book a Demo flow with lead capture and
+            auto-redirect to platform • Sign In & Registration modals • About Us section • Scope & MVP section • User
+            Stories & Epics section • Interactive threat detection dashboard • Animated threat cards with live
+            simulation • IoT Vulnerability Scanner UI • Network Anomaly Detection visualization • SOC incident feed • AI
+            Cybersecurity Chatbot • Terms & Conditions page</div>
+        </div>
+
+        <div class="accord" onclick="toggleAccord(this)">
+          <div class="accord-header">
+            <h3>🎯 What This MVP Validates</h3><span class="accord-arrow">▾</span>
+          </div>
+          <div class="accord-body">Product-market fit for industrial cybersecurity • Demo-to-lead conversion flow • UI
+            feasibility for SOC workflows • AI anomaly scoring concept • Executive-friendly risk visibility •
+            Investor-grade platform credibility</div>
+        </div>
+
+        <div class="accord" onclick="toggleAccord(this)">
+          <div class="accord-header">
+            <h3>🚫 Intentionally Out of Scope</h3><span class="accord-arrow">▾</span>
+          </div>
+          <div class="accord-body">Production SSO / enterprise authentication • Live packet-level OT network ingestion •
+            Multi-tenant billing engine • Real SIEM integrations (Splunk, QRadar, etc.) • Deep forensic tooling •
+            Production-grade incident orchestration • Multi-region deployment</div>
+        </div>
+
+        <div class="accord" onclick="toggleAccord(this)">
+          <div class="accord-header">
+            <h3>⏱ Why Scope Is Realistic for MVP</h3><span class="accord-arrow">▾</span>
+          </div>
+          <div class="accord-body">Focused on one polished, coherent demo flow rather than spreading across many
+            half-finished features. Simulated data replaces production integrations. UI-first approach lets evaluators
+            immediately see product value. Clear MVP boundaries signal product thinking, not limitation.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- EPICS -->
+    <section class="section reveal" id="epics">
+      <div class="section-tag">User Stories & Epics</div>
+      <h2 class="section-title">Product backlog overview</h2>
+      <p class="section-sub" style="margin-bottom:0">Five epics covering the full SentinelX user journey from onboarding
+        to executive reporting.</p>
+      <div class="epics-grid">
+        <div class="epic-card">
+          <div class="epic-header"><span class="epic-num">Epic 1</span>
+            <h3>Secure Onboarding & Access</h3>
+          </div>
+          <ul class="story-list">
+            <li>Register to create an account</li>
+            <li>Sign in to access the dashboard</li>
+            <li>Role-based access for different views</li>
+          </ul>
+        </div>
+        <div class="epic-card">
+          <div class="epic-header"><span class="epic-num">Epic 2</span>
+            <h3>Industrial Threat Visibility</h3>
+          </div>
+          <ul class="story-list">
+            <li>Live threat cards for quick SOC reaction</li>
+            <li>Anomaly scores to prioritize incidents</li>
+            <li>Simple risk summaries for plant managers</li>
+          </ul>
+        </div>
+        <div class="epic-card">
+          <div class="epic-header"><span class="epic-num">Epic 3</span>
+            <h3>Incident Explanation & Context</h3>
+          </div>
+          <ul class="story-list">
+            <li>Incident context explaining why flagged</li>
+            <li>Affected-device details for engineers</li>
+            <li>Concise executive severity summaries</li>
+          </ul>
+        </div>
+        <div class="epic-card">
+          <div class="epic-header"><span class="epic-num">Epic 4</span>
+            <h3>Demo & Lead Capture</h3>
+          </div>
+          <ul class="story-list">
+            <li>Book a demo to see product live</li>
+            <li>Clear CTA preventing navigation loss</li>
+            <li>Booking submissions stored for follow-up</li>
+          </ul>
+        </div>
+        <div class="epic-card" style="grid-column:1/-1">
+          <div class="epic-header"><span class="epic-num">Epic 5</span>
+            <h3>Trust, Compliance & Transparency</h3>
+          </div>
+          <ul class="story-list" style="columns:2;gap:2rem">
+            <li>Read Terms & Conditions before submitting data</li>
+            <li>Clear privacy language to build platform trust</li>
+            <li>Security-oriented design choices throughout</li>
+            <li>Formal data usage and liability statements</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section reveal" id="about">
+      <div class="section-tag">About Us</div>
+      <h2 class="section-title">Built for the frontline<br>of industrial security</h2>
+      <div class="about-grid">
+        <div>
+          <p style="color:var(--text2);line-height:1.75;margin-bottom:1rem;font-size:0.95rem">SentinelX was founded on a
+            simple conviction: industrial operations are the backbone of the modern world, and they deserve security
+            tools that match that importance.</p>
+          <p style="color:var(--text2);line-height:1.75;font-size:0.95rem">We combine machine learning, OT protocol
+            intelligence, and SOC workflow expertise into a platform that's powerful for security engineers yet clear
+            for executives. Every design decision puts operational trust first.</p>
+          <div class="team-tags">
+            <span class="tag">OT Security</span><span class="tag">ICS Intelligence</span><span class="tag">SOC
+              Automation</span>
+            <span class="tag">SCADA Defense</span><span class="tag">IoT Hardening</span><span class="tag">AI/ML
+              Detection</span>
+          </div>
+        </div>
+        <div>
+          <div class="about-stat-grid">
+            <div class="about-stat">
+              <div class="about-stat-val">48ms</div>
+              <div class="about-stat-lbl">Mean Detection Time</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">99.2%</div>
+              <div class="about-stat-lbl">Model Accuracy</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">500+</div>
+              <div class="about-stat-lbl">Device Types Profiled</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-val">5</div>
+              <div class="about-stat-lbl">Security Modules</div>
+            </div>
+          </div>
+          <div
+            style="margin-top:1rem;background:rgba(102,147,153,0.08);border:1px solid rgba(102,147,153,0.2);border-radius:8px;padding:1rem">
+            <p style="font-size:0.78rem;color:var(--teal);font-weight:600;margin-bottom:4px">🛡 Security-First Promise
+            </p>
+            <p style="font-size:0.78rem;color:var(--text2);line-height:1.6">Every feature is designed with
+              defense-in-depth principles. Zero-trust architecture, encrypted telemetry, and full audit trails are
+              built-in, not bolted-on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <div class="booking-section" id="booking">
+      <section class="section reveal">
+        <div class="section-tag">Get Started</div>
+        <h2 class="section-title">Book a Demo</h2>
+        <p class="section-sub">See SentinelX in action. Our team will walk you through a live threat detection scenario
+          tailored to your environment.</p>
+        <div class="form-grid" id="bookingForm">
+          <div class="form-field"><label>Full Name *</label><input type="text" placeholder="Alex Johnson" id="f-name" />
+          </div>
+          <div class="form-field"><label>Work Email *</label><input type="email" placeholder="alex@company.com"
+              id="f-email" /></div>
+          <div class="form-field"><label>Organization *</label><input type="text" placeholder="Acme Industries"
+              id="f-org" /></div>
+          <div class="form-field"><label>Role</label>
+            <select id="f-role">
+              <option value="">Select your role</option>
+              <option>SOC Analyst</option>
+              <option>Plant / Operations Manager</option>
+              <option>Security / IT Admin</option>
+              <option>Executive / Decision Maker</option>
+              <option>Industrial Engineer / OT Technician</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-field full"><label>Message</label><textarea
+              placeholder="Tell us about your environment or specific security challenges..." id="f-msg"></textarea>
+          </div>
+          <div class="form-field full" style="align-items:flex-start">
+            <button class="btn btn-primary btn-lg" onclick="submitBooking()">Book My Demo →</button>
+            <p class="form-note">By submitting, you agree to our <a onclick="showPage('terms')"
+                style="color:var(--amber);cursor:pointer">Terms & Conditions</a>. This is a demonstration of the
+              SentinelX platform capabilities.</p>
+          </div>
+        </div>
+        <div class="success-msg" id="bookingSuccess">
+          <h3>🎉 Demo Booked Successfully!</h3>
+          <p>Thanks for your interest in SentinelX. You'll be redirected to the platform dashboard where you can explore
+            all features.</p>
+          <div class="redirect-bar">
+            <div class="redirect-progress" id="redirectProgress"></div>
+          </div>
+          <div class="redirect-text" id="redirectText">Redirecting to platform in 3...</div>
+          <button class="btn btn-primary" style="margin-top:0.75rem" onclick="showPage('dashboard')">Explore Platform
+            Now →</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <div class="footer-brand-logo">
+              <img src="logo.png" alt="SentinelX" onerror="this.outerHTML='⬡'" />
+              SentinelX
+            </div>
+            <p>AI-powered industrial cybersecurity platform for OT/ICS environments, IoT monitoring, and enterprise SOC
+              teams. Detect threats early, respond faster.</p>
+            <div class="platform-badge" style="margin-top:0.5rem">🛡️ Enterprise-Grade Security</div>
+          </div>
+          <div class="footer-col">
+            <h4>Platform</h4>
+            <a onclick="showPage('dashboard')">SOC Dashboard</a>
+            <a onclick="showPage('dashboard')">IoT Scanner</a>
+            <a onclick="showPage('dashboard')">Network Monitor</a>
+            <a onclick="showPage('dashboard')">Threat Intelligence</a>
+            <a onclick="showPage('dashboard')">Alert Prioritization</a>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a onclick="scrollTo_('#about')">About Us</a>
+            <a onclick="scrollTo_('#scope')">Scope & MVP</a>
+            <a onclick="scrollTo_('#booking')">Book a Demo</a>
+            <a onclick="showPage('terms')">Terms & Conditions</a>
+            <a>Privacy Notice</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 SentinelX — Industrial Cybersecurity Platform...</p>
+          <div class="platform-badge">MVP Prototype v1.0</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="page-dashboard" class="page">
+    <div class="dash-header">
+      <div class="dash-title">
+        <img src="logo.png" alt="SX" style="mix-blend-mode: screen;" onerror="this.outerHTML='⬡'" />
+        SentinelX Platform
+      </div>
+      <div class="dash-status"><span class="live-dot"></span>Live Monitoring Active — Simulated Environment</div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <input type="text" class="dash-search" id="dashSearch" placeholder="Search modules..."
+          onkeyup="handleDashSearch(event)" />
+        <div class="dash-profile">
+          <div class="dash-profile-img">AD</div>
+          <div class="dash-profile-name">Admin User</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:0.7rem;padding:6px 12px" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+    <div class="dash-layout">
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <h4>Operations</h4>
+          <button class="sidebar-item active" onclick="switchDashTab('overview',this)"><span
+              class="sidebar-item-icon">📊</span>Overview</button>
+          <button class="sidebar-item" onclick="switchDashTab('iot',this)"><span class="sidebar-item-icon">📱</span>IoT
+            Scanner<span class="sidebar-badge">7</span></button>
+          <button class="sidebar-item" onclick="switchDashTab('network',this)"><span
+              class="sidebar-item-icon">🌐</span>Network Monitor</button>
+          <button class="sidebar-item" onclick="switchDashTab('incidents',this)"><span
+              class="sidebar-item-icon">⚠️</span>Incidents<span class="sidebar-badge" id="incBadge">3</span></button>
+          <button class="sidebar-item" onclick="switchDashTab('intel',this)"><span
+              class="sidebar-item-icon">🔮</span>Threat Intel</button>
+        </div>
+        <div class="sidebar-section">
+          <h4>Management</h4>
+          <button class="sidebar-item" onclick="switchDashTab('devices',this)"><span
+              class="sidebar-item-icon">🖥️</span>Assets</button>
+          <button class="sidebar-item" onclick="switchDashTab('policy',this)"><span
+              class="sidebar-item-icon">🔐</span>Policy & Access</button>
+        </div>
+        <div class="sidebar-section">
+          <h4>System</h4>
+          <button class="sidebar-item" onclick="showPage('home')"><span class="sidebar-item-icon">🏠</span>Back to
+            Home</button>
+          <button class="sidebar-item" onclick="showPage('terms')"><span
+              class="sidebar-item-icon">📄</span>Terms</button>
+        </div>
+      </div>
+      <div class="dash-content" id="dashContent"></div>
+    </div>
+  </div>
+
+  <!-- TERMS PAGE -->
+  <div id="page-terms" class="page">
+    <div class="terms-content">
+      <h1>Terms & Conditions</h1>
+      <p class="terms-date">Effective Date: May 2026 — Platform Evaluation Edition</p>
+      <div
+        style="background:rgba(182,64,24,0.08);border:1px solid rgba(182,64,24,0.2);border-radius:8px;padding:1rem;margin-bottom:2rem">
+        <p style="font-size:0.82rem;color:var(--amber);font-weight:600">⚠️ Prototype Disclaimer</p>
+        <p style="font-size:0.82rem;color:var(--text2);margin-top:4px">SentinelX is an advanced cybersecurity prototype
+          platform. All data, metrics, and threat simulations shown are fictional and for demonstration and evaluation
+          purposes only.</p>
+      </div>
+      <div class="terms-section">
+        <h2>1. Platform Usage</h2>
+        <p>SentinelX (the "Platform") is provided as a prototype for evaluation and demonstration purposes. Access to
+          the Platform is granted solely for reviewing product feasibility and core system capabilities. Any use outside
+          this context requires explicit written permission from the SentinelX team.</p>
+      </div>
+      <div class="terms-section">
+        <h2>2. Demo & Prototype Disclaimer</h2>
+        <p>All threat data, incident feeds, device telemetry, and security metrics displayed within SentinelX are
+          simulated. They do not represent real security events, actual vulnerabilities, or genuine operational data.
+          The Platform is not intended for use in production industrial environments.</p>
+      </div>
+      <div class="terms-section">
+        <h2>3. User Responsibility</h2>
+        <ul>
+          <li>You agree to use the Platform only for lawful purposes within the scope of evaluation and demonstration
+          </li>
+          <li>You must not attempt to reverse-engineer, scrape, or exploit the prototype</li>
+          <li>Submitted demo booking information will only be used for direct demonstration follow-up</li>
+          <li>You are responsible for the accuracy of information you provide</li>
+        </ul>
+      </div>
+      <div class="terms-section">
+        <h2>4. Data Handling Summary</h2>
+        <p>Information submitted via the demo booking form (name, email, organization, role) is collected solely to
+          demonstrate lead capture functionality. This data is stored temporarily and will not be shared with third
+          parties, sold, or used for marketing without consent.</p>
+      </div>
+      <div class="terms-section">
+        <h2>5. Account Security</h2>
+        <p>If you create an account, you are responsible for maintaining the confidentiality of your credentials. The
+          prototype authentication system is not production-grade and should not be used with real sensitive passwords.
+        </p>
+      </div>
+      <div class="terms-section">
+        <h2>6. Limitation of Liability</h2>
+        <p>SentinelX and its developers shall not be liable for any damages arising from the use or inability to use
+          this prototype. The Platform is provided "as is" without warranties of any kind, either express or implied.
+        </p>
+      </div>
+      <div class="terms-section">
+        <h2>7. Contact Information</h2>
+        <p>For questions about these Terms, contact the SentinelX team. Demo inquiries can be submitted through the
+          booking form on the Home page.</p>
+      </div>
+      <button class="btn btn-ghost" onclick="showPage('home')" style="margin-top:1rem">← Back to Home</button>
+    </div>
+  </div>
+
+  <!-- AUTH MODALS -->
+  <div class="modal-overlay" id="modal-signin" onclick="closeModal(event,'signin')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal2('signin')">✕</button>
+      <div class="modal-title">Welcome back</div>
+      <div class="modal-sub">Sign in to your SentinelX account</div>
+      <div class="auth-form">
+        <div class="auth-field"><label>Email</label><input type="email" placeholder="you@company.com" id="si-email" />
+        </div>
+        <div class="auth-field"><label>Password</label><input type="password" placeholder="••••••••" id="si-pass" />
+        </div>
+        <button class="btn btn-primary" onclick="doSignin()" style="width:100%;padding:11px">Sign In to
+          Platform</button>
+        <div class="modal-divider"><span>or</span></div>
+        <div class="auth-toggle">Don't have an account? <a
+            onclick="closeModal2('signin');showModal('register')">Register →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-register" onclick="closeModal(event,'register')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal2('register')">✕</button>
+      <div class="modal-title">Create account</div>
+      <div class="modal-sub">Join SentinelX — Platform Demo</div>
+      <div class="auth-form">
+        <div class="auth-field"><label>Full Name</label><input type="text" placeholder="Alex Johnson" /></div>
+        <div class="auth-field"><label>Email</label><input type="email" placeholder="you@company.com" /></div>
+        <div class="auth-field"><label>Role</label>
+          <select
+            style="background:rgba(10,7,5,0.8);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;padding:10px 14px;outline:none;width:100%">
+            <option>SOC Analyst</option>
+            <option>Plant Manager</option>
+            <option>Security Admin</option>
+            <option>Executive</option>
+            <option>OT Technician</option>
+          </select>
+        </div>
+        <div class="auth-field"><label>Password</label><input type="password" placeholder="••••••••" /></div>
+        <button class="btn btn-primary" onclick="doRegister()" style="width:100%;padding:11px">Create Account →</button>
+        <p style="font-size:0.72rem;color:var(--text3);text-align:center">By registering, you agree to our <a
+            onclick="closeModal2('register');showPage('terms')" style="color:var(--amber);cursor:pointer">Terms &
+            Conditions</a></p>
+        <div class="modal-divider"><span>or</span></div>
+        <div class="auth-toggle">Already have an account? <a onclick="closeModal2('register');showModal('signin')">Sign
+            In →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHATBOT -->
+  <button class="chat-fab" id="chatFab" onclick="toggleChat()" title="SentinelX AI Assistant">🛡️</button>
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">🛡️</div>
+        <div>
+          <h4>SentinelX AI</h4>
+          <p>Online — Cybersecurity Assistant</p>
+        </div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">👋 Hi! I'm the SentinelX AI Assistant. Ask me about industrial cybersecurity, OT/ICS
+        security, threat detection, or how SentinelX works.</div>
+    </div>
+    <div class="chat-typing" id="chatTyping">
+      <div class="typing-dots"><span></span><span></span><span></span></div>
+      &nbsp;SentinelX AI is thinking...
+    </div>
+    <div class="chat-quick-replies" id="chatQuickReplies">
+      <button class="quick-reply" onclick="sendQuickReply(this)">What is SentinelX?</button>
+      <button class="quick-reply" onclick="sendQuickReply(this)">OT vs IT security</button>
+      <button class="quick-reply" onclick="sendQuickReply(this)">Common ICS threats</button>
+      <button class="quick-reply" onclick="sendQuickReply(this)">How does anomaly detection work?</button>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-input" id="chatInput" placeholder="Ask about cybersecurity..."
+        onkeydown="if(event.key==='Enter')sendChat()" />
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD NOTIFICATION TOAST -->
+  <div class="dash-toast" id="dashToast">
+    <div class="dash-toast-icon">⚠️</div>
+    <div class="dash-toast-content">
+      <h5 id="toastTitle">New Alert</h5>
+      <p id="toastBody">Details loading...</p>
+    </div>
+    <button class="dash-toast-close" onclick="closeDashToast()">✕</button>
+  </div>
+
+  <script>
+    let isLoggedIn = false;
+    let bcInterval = null;
+
+    // ===== PAGES =====
+    function showPage(name) {
+      if (name === 'dashboard' && !isLoggedIn) {
+        showModal('signin');
+        return;
+      }
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pg = document.getElementById('page-' + name);
+      if (pg) { pg.classList.add('active'); window.scrollTo(0, 0) }
+      if (name === 'dashboard') { renderDash('overview'); startDashLiveUpdates(); }
+      else { stopDashLiveUpdates(); }
+    }
+    function scrollTo_(id) {
+      showPage('home');
+      setTimeout(() => { const el = document.querySelector(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100);
+    }
+
+    // ===== DASHBOARD SEARCH =====
+    function handleDashSearch(e) {
+      if (e.key === 'Enter' || e.type === 'keyup') {
+        const term = e.target.value.toLowerCase();
+        if (term.length < 3) return;
+        const items = document.querySelectorAll('.sidebar-item');
+        if (term.includes('iot') || term.includes('vulnerab') || term.includes('scan')) switchDashTab('iot', items[1]);
+        else if (term.includes('network') || term.includes('anomal')) switchDashTab('network', items[2]);
+        else if (term.includes('incident')) switchDashTab('incidents', items[3]);
+        else if (term.includes('intel') || term.includes('predict') || term.includes('attack')) switchDashTab('intel', items[4]);
+        else if (term.includes('soc') || term.includes('overview') || term.includes('real-time')) switchDashTab('overview', items[0]);
+      }
+    }
+
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+      document.getElementById('navLinks').classList.toggle('mobile-open');
+      document.getElementById('hamburgerBtn').classList.toggle('open');
+    }
+    function closeMobileMenu() {
+      document.getElementById('navLinks').classList.remove('mobile-open');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    }
+
+    // ===== MODALS =====
+    function showModal(name) {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+      if (name) { const m = document.getElementById('modal-' + name); if (m) m.classList.add('show') }
+    }
+    function closeModal(e, name) { if (e.target === e.currentTarget) closeModal2(name) }
+    function closeModal2(name) { const m = document.getElementById('modal-' + name); if (m) m.classList.remove('show') }
+
+    // ===== AUTH =====
+    function doSignin() { isLoggedIn = true; closeModal2('signin'); showPage('dashboard'); }
+    function doRegister() { isLoggedIn = true; closeModal2('register'); showPage('dashboard'); }
+    function doLogout() { isLoggedIn = false; showPage('home'); }
+
+    // ===== BOOKING WITH AUTO-REDIRECT =====
+    let redirectTimer = null;
+    function submitBooking() {
+      const n = document.getElementById('f-name').value;
+      const em = document.getElementById('f-email').value;
+      if (!n || !em) { alert('Please fill in required fields (Name and Email)'); return }
+      document.getElementById('bookingForm').style.display = 'none';
+      document.getElementById('bookingSuccess').classList.add('show');
+      // Start redirect countdown
+      const progress = document.getElementById('redirectProgress');
+      const text = document.getElementById('redirectText');
+      progress.style.width = '100%';
+      let countdown = 3;
+      text.textContent = 'Redirecting to platform in ' + countdown + '...';
+      redirectTimer = setInterval(() => {
+        countdown--;
+        if (countdown > 0) { text.textContent = 'Redirecting to platform in ' + countdown + '...'; }
+        else {
+          clearInterval(redirectTimer);
+          text.textContent = 'Launching platform...';
+          isLoggedIn = true;
+          setTimeout(() => showPage('dashboard'), 300);
+        }
+      }, 1000);
+    }
+
+    // ===== ACCORDIONS =====
+    function toggleAccord(el) {
+      const body = el.querySelector('.accord-body');
+      const arrow = el.querySelector('.accord-arrow');
+      body.classList.toggle('open');
+      arrow.classList.toggle('open');
+    }
+
+    // ===== COUNTER ANIMATION =====
+    function animateCount(id, target, suffix) {
+      let cur = 0; const el = document.getElementById(id);
+      if (!el) return;
+      const step = Math.ceil(target / 60);
+      const t = setInterval(() => { cur = Math.min(cur + step, target); el.textContent = cur + (suffix || ''); if (cur >= target) clearInterval(t) }, 25);
+    }
+    animateCount('cnt1', 14327, '');
+    animateCount('cnt2', 3842, '');
+    animateCount('cnt3', 48, 'ms');
+    animateCount('cnt4', 94, '');
+
+    // ===== TICKER =====
+    const tickerData = [
+      { sev: 'CRITICAL', msg: 'PLC-004 — Unauthorized modbus register write detected', loc: 'Zone A' },
+      { sev: 'HIGH', msg: 'IoT-Sensor-12 — Anomalous data exfiltration pattern', loc: 'Plant Floor' },
+      { sev: 'MEDIUM', msg: 'SCADA-HMI-01 — Brute force login attempt blocked', loc: 'Control Room' },
+      { sev: 'HIGH', msg: 'Router-OT-7 — Unexpected outbound connection', loc: 'Network Edge' },
+      { sev: 'LOW', msg: 'Camera-Grid-3 — Firmware version EOL alert', loc: 'Perimeter' },
+      { sev: 'CRITICAL', msg: 'Historian-DB — SQL injection pattern in query', loc: 'Data Center' },
+    ];
+    function buildTicker() {
+      const t = document.getElementById('ticker');
+      if (!t) return;
+      const items = [...tickerData, ...tickerData];
+      t.innerHTML = items.map(i => `<span class="ticker-item"><span class="dot" style="background:${i.sev === 'CRITICAL' ? '#E05533' : i.sev === 'HIGH' ? 'var(--amber)' : i.sev === 'MEDIUM' ? 'var(--teal)' : 'var(--text3)'}"></span>[${i.sev}] ${i.msg} — ${i.loc}</span>`).join('');
+    }
+    buildTicker();
+
+    // ===== THREAT CARDS =====
+    const threats = [
+      { sev: 'critical', label: 'CRITICAL', score: '9.8', title: 'PLC-004 Modbus Exploit', meta: 'OT Zone A • 2 min ago', cls: 'c' },
+      { sev: 'high', label: 'HIGH', score: '7.4', title: 'IoT Exfil Pattern', meta: 'Sensor Cluster • 5 min ago', cls: 'h' },
+      { sev: 'medium', label: 'MEDIUM', score: '5.1', title: 'HMI Login Anomaly', meta: 'Control Room • 12 min ago', cls: 'm' },
+      { sev: 'critical', label: 'CRITICAL', score: '9.2', title: 'SCADA Auth Bypass', meta: 'Control Layer • 18 min ago', cls: 'c' },
+      { sev: 'high', label: 'HIGH', score: '6.8', title: 'OT Lateral Movement', meta: 'Network Edge • 21 min ago', cls: 'h' },
+      { sev: 'medium', label: 'MEDIUM', score: '4.3', title: 'Firmware EOL Device', meta: 'Perimeter • 35 min ago', cls: 'm' },
+    ];
+    function buildThreatCards() {
+      const el = document.getElementById('threatCards');
+      if (!el) return;
+      el.innerHTML = threats.map((t, i) => `
+    <div class="threat-card ${t.sev}" style="animation-delay:${i * 0.1}s">
+      <div class="score-ring ${t.cls}">${t.score}</div>
+      <div class="threat-label">${t.label}</div>
+      <div class="threat-title">${t.title}</div>
+      <div class="threat-meta">${t.meta}</div>
+    </div>`).join('');
+    }
+    buildThreatCards();
+
+    // ===== SCROLL REVEAL =====
+    const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }) }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ===== DASHBOARD =====
+    let activeDashTab = 'overview';
+    let dashLiveInterval = null;
+    let liveKpiData = { threats: 12, devices: 247, risk: 7.8, response: 48 };
+
+    function switchDashTab(tab, btn) {
+      activeDashTab = tab;
+      document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderDash(tab);
+    }
+
+    function startDashLiveUpdates() {
+      stopDashLiveUpdates();
+      dashLiveInterval = setInterval(() => {
+        // Simulate KPI changes
+        liveKpiData.threats += Math.random() > 0.6 ? 1 : 0;
+        liveKpiData.devices += Math.random() > 0.9 ? 1 : 0;
+        liveKpiData.risk = Math.round((liveKpiData.risk + ((Math.random() - 0.45) * 0.3)) * 10) / 10;
+        liveKpiData.risk = Math.max(5, Math.min(9.9, liveKpiData.risk));
+        liveKpiData.response = Math.max(30, Math.min(80, liveKpiData.response + Math.round((Math.random() - 0.5) * 6)));
+        // Update KPI cards if on overview
+        if (activeDashTab === 'overview') {
+          const t = document.getElementById('liveThreats'); if (t) t.textContent = liveKpiData.threats;
+          const d = document.getElementById('liveDevices'); if (d) d.textContent = liveKpiData.devices;
+          const r = document.getElementById('liveRisk'); if (r) r.textContent = liveKpiData.risk;
+          const m = document.getElementById('liveResponse'); if (m) m.textContent = liveKpiData.response + 'ms';
+        }
+        // Occasionally show toast notification
+        if (Math.random() > 0.7) { showDashToast(); }
+      }, 5000);
+    }
+    function stopDashLiveUpdates() { if (dashLiveInterval) { clearInterval(dashLiveInterval); dashLiveInterval = null; } }
+
+    const toastAlerts = [
+      { icon: '🔴', title: 'CRITICAL: PLC-004 Register Write', body: 'Unauthorized modbus write detected in OT Zone A' },
+      { icon: '🟠', title: 'HIGH: Anomalous Outbound Traffic', body: 'Router-OT-7 initiating connections to unknown external IP' },
+      { icon: '🟡', title: 'MEDIUM: Brute Force Attempt', body: '5 failed login attempts on SCADA-HMI-01 in 30 seconds' },
+      { icon: '⚠️', title: 'New Device Detected', body: 'Unknown device 10.4.2.88 appeared on network segment B' },
+      { icon: '🔵', title: 'Policy Update', body: 'Alert threshold modified by Security Admin at 14:23' },
+    ];
+    function showDashToast() {
+      const toast = document.getElementById('dashToast');
+      const alert = toastAlerts[Math.floor(Math.random() * toastAlerts.length)];
+      document.getElementById('toastTitle').textContent = alert.title;
+      document.getElementById('toastBody').textContent = alert.body;
+      toast.querySelector('.dash-toast-icon').textContent = alert.icon;
+      toast.classList.add('show');
+      setTimeout(() => closeDashToast(), 4000);
+    }
+    function closeDashToast() { document.getElementById('dashToast').classList.remove('show'); }
+
+    const incidents = [
+      { sev: 'critical', label: 'CRITICAL', title: 'PLC-004 Unauthorized Register Write', time: '2 min ago', device: 'PLC-004 / Zone A', id: 'INC-2847', detail: 'An unauthorized Modbus register write was detected on PLC-004 in OT Zone A. The write attempted to modify setpoint registers controlling temperature thresholds in reactor unit 3.', actions: ['Isolate PLC-004 from network', 'Review Modbus access control lists', 'Check for firmware tampering', 'Notify OT operations manager'] },
+      { sev: 'high', label: 'HIGH', title: 'Anomalous Data Exfiltration Detected', time: '5 min ago', device: 'IoT-Sensor-12 / Plant Floor', id: 'INC-2846', detail: 'IoT-Sensor-12 is transmitting data volumes 340% above baseline to an external IP address. Pattern matches known data staging behavior prior to exfiltration.', actions: ['Block external IP at firewall', 'Capture traffic for forensics', 'Inspect sensor configuration', 'Reset sensor credentials'] },
+      { sev: 'critical', label: 'CRITICAL', title: 'SCADA HMI Authentication Bypass Attempt', time: '18 min ago', device: 'SCADA-HMI-01 / Control Room', id: 'INC-2845', detail: 'Multiple authentication bypass attempts detected against SCADA-HMI-01 using known CVE-2024-3721 exploit payload. Attack originated from internal network segment.', actions: ['Patch HMI system immediately', 'Enable MFA on remote access', 'Review internal network segmentation', 'Conduct lateral movement analysis'] },
+      { sev: 'high', label: 'HIGH', title: 'Unexpected Outbound Connection Established', time: '21 min ago', device: 'Router-OT-7 / Network Edge', id: 'INC-2844', detail: 'Router-OT-7 established an outbound connection to IP 185.220.101.x on port 443. This IP is associated with known C2 infrastructure.', actions: ['Block destination IP', 'Inspect router configuration', 'Check for rogue firmware', 'Enable DNS sinkholing'] },
+      { sev: 'medium', label: 'MEDIUM', title: 'Legacy Protocol Cleartext Communication', time: '34 min ago', device: 'Historian-DB / Data Center', id: 'INC-2843', detail: 'Cleartext Telnet session detected between Historian-DB and legacy SCADA system. Credentials may be exposed to network sniffing.', actions: ['Migrate to SSH/encrypted protocol', 'Enable network segmentation', 'Add monitoring rule for cleartext protocols'] },
+      { sev: 'low', label: 'LOW', title: 'IoT Camera Firmware End-of-Life Alert', time: '1 hr ago', device: 'Camera-Grid-03 / Perimeter', id: 'INC-2842', detail: 'Camera-Grid-03 is running firmware v2.1.4 which reached end-of-life. No security patches will be issued. Known vulnerabilities include DNS rebinding and RTSP stream exposure.', actions: ['Schedule firmware replacement', 'Restrict camera network access', 'Add compensating controls'] },
+    ];
+
+    const iotDevices = [
+      { name: 'PLC-004', type: 'Siemens S7-300', score: 9.8, cls: 'c', vulns: [{ t: 'v-crit', txt: 'Hardcoded credentials (CVE-2024-1234)' }, { t: 'v-crit', txt: 'Unauthenticated modbus access' }, { t: 'v-high', txt: 'Outdated firmware v2.1.4' }] },
+      { name: 'IoT-Sensor-12', type: 'Phoenix Contact', score: 7.4, cls: 'h', vulns: [{ t: 'v-high', txt: 'Weak TLS 1.0 encryption' }, { t: 'v-high', txt: 'Default admin password' }, { t: 'v-med', txt: 'Open debug port 8080' }] },
+      { name: 'SCADA-HMI-01', type: 'Wonderware InTouch', score: 9.2, cls: 'c', vulns: [{ t: 'v-crit', txt: 'SQL injection in query handler' }, { t: 'v-crit', txt: 'No MFA on remote access' }, { t: 'v-high', txt: 'Exposed admin panel' }] },
+      { name: 'Router-OT-7', type: 'Hirschmann EAGLE', score: 6.8, cls: 'h', vulns: [{ t: 'v-high', txt: 'Unnecessary services enabled' }, { t: 'v-med', txt: 'Weak SNMP community string' }, { t: 'v-med', txt: 'No egress filtering' }] },
+      { name: 'Camera-Grid-03', type: 'Axis P3245', score: 4.3, cls: 'm', vulns: [{ t: 'v-med', txt: 'Firmware EOL — no patches' }, { t: 'v-med', txt: 'RTSP stream not encrypted' }, { t: 'v-med', txt: 'DNS rebinding vulnerability' }] },
+      { name: 'Historian-DB', type: 'OSIsoft PI Server', score: 8.1, cls: 'c', vulns: [{ t: 'v-crit', txt: 'SQL injection vector' }, { t: 'v-high', txt: 'Overprivileged service account' }, { t: 'v-high', txt: 'No data-at-rest encryption' }] },
+    ];
+
+    function toggleIncidentDetail(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('open');
+    }
+
+    function renderDash(tab) {
+      const el = document.getElementById('dashContent');
+      if (!el) return;
+      if (tab === 'overview') {
+        el.innerHTML = `
+      <div class="dash-kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Active Threats</div><div class="kpi-val red" id="liveThreats">${liveKpiData.threats}</div><div class="kpi-sub down">↑ 3 in last hour</div></div>
+        <div class="kpi-card"><div class="kpi-label">Devices Online</div><div class="kpi-val teal" id="liveDevices">${liveKpiData.devices}</div><div class="kpi-sub up">↑ 99.2% uptime</div></div>
+        <div class="kpi-card"><div class="kpi-label">Risk Score</div><div class="kpi-val amber" id="liveRisk">${liveKpiData.risk}</div><div class="kpi-sub down">↑ from 6.9 yesterday</div></div>
+        <div class="kpi-card"><div class="kpi-label">Mean Response</div><div class="kpi-val" id="liveResponse">${liveKpiData.response}ms</div><div class="kpi-sub up">↓ 12ms improvement</div></div>
+      </div>
+      <div class="dash-panels">
+        <div class="panel">
+          <div class="panel-title">Live Incident Feed <span>Auto-refreshing • Click to expand</span></div>
+          ${incidents.slice(0, 4).map((inc, idx) => `<div><div class="incident-item" onclick="toggleIncidentDetail('inc-ov-${idx}')"><span class="severity-badge sev-${inc.sev}">${inc.label}</span><div class="incident-info"><h4>${inc.title}</h4><p>${inc.device} • ${inc.time}</p></div></div><div class="incident-detail" id="inc-ov-${idx}"><h5>Investigation Summary</h5><p>${inc.detail}</p><h5 style="margin-top:0.75rem">Recommended Actions</h5><ul>${inc.actions.map(a => '<li>' + a + '</li>').join('')}</ul></div></div>`).join('')}
+        </div>
+        <div class="panel">
+          <div class="panel-title">Device Status <span>${liveKpiData.devices} devices</span></div>
+          <div class="device-list">
+            <div class="device-item"><span class="device-name">PLC-004</span><span class="device-status ds-critical">⚠ Critical</span></div>
+            <div class="device-item"><span class="device-name">SCADA-HMI-01</span><span class="device-status ds-critical">⚠ Critical</span></div>
+            <div class="device-item"><span class="device-name">IoT-Sensor-12</span><span class="device-status ds-warn">⚡ Warning</span></div>
+            <div class="device-item"><span class="device-name">Router-OT-7</span><span class="device-status ds-warn">⚡ Warning</span></div>
+            <div class="device-item"><span class="device-name">Historian-DB</span><span class="device-status ds-ok">✓ Online</span></div>
+            <div class="device-item"><span class="device-name">Camera-Grid-03</span><span class="device-status ds-ok">✓ Online</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <div class="panel-title">Threat Activity — 24h Window <span>Simulated telemetry • Live updates</span></div>
+        <div id="sparklineArea" style="display:flex;align-items:flex-end;gap:3px;height:60px;padding-top:8px">${Array.from({ length: 48 }, (_, i) => { const h = Math.floor(Math.random() * 55 + 5); const c = h > 45 ? '#B64018' : h > 30 ? 'var(--amber)' : 'var(--teal)'; return `<div style="flex:1;height:${h}px;background:${c};border-radius:2px;opacity:0.7;transition:height 0.5s"></div>` }).join('')}</div>
+      </div>`;
+      } else if (tab === 'iot') {
+        el.innerHTML = `
+      <div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between">
+        <div><h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800">IoT Vulnerability Scanner</h2><p style="font-size:0.8rem;color:var(--text3);margin-top:2px">Continuous assessment of ${liveKpiData.devices} connected devices</p></div>
+        <span class="severity-badge sev-critical" style="font-size:0.75rem;padding:5px 12px">7 Critical Vulnerabilities</span>
+      </div>
+      <div class="iot-grid">${iotDevices.map(d => `
+        <div class="iot-device">
+          <div class="iot-device-header"><span class="iot-device-name">${d.name}</span><div class="iot-score score-ring ${d.cls}">${d.score}</div></div>
+          <p style="font-size:0.7rem;color:var(--text3);margin-bottom:0.6rem">${d.type}</p>
+          <ul class="iot-vulns">${d.vulns.map(v => `<li class="${v.t}">${v.txt}</li>`).join('')}</ul>
+        </div>`).join('')}</div>
+      <div class="bc-panel">
+        <div class="bc-title">🔗 Blockchain Secure Data Exchange</div>
+        <p style="font-size:0.75rem;color:var(--text3);margin-bottom:1rem">Distributed ledger technology for tamper-proof industrial communication. Real-time cryptographic device authentication system active.</p>
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;">
+          <div style="background:var(--card-bg);border-radius:6px;padding:1rem;border:1px solid rgba(255,255,255,0.05)">
+            <h5 style="font-size:0.75rem;color:var(--text);margin-bottom:0.5rem">Device Authentication</h5>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.7rem"><span style="color:var(--text2)">Auth Nodes</span><span style="color:var(--teal)">24 Active</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.7rem"><span style="color:var(--text2)">Consensus State</span><span style="color:var(--teal)">Validated</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.7rem"><span style="color:var(--text2)">Encryption Layer</span><span style="color:var(--amber)">AES-256</span></div>
+          </div>
+          <div class="bc-ledger" id="bcLedger">
+          </div>
+        </div>
+      </div>`;
+        startBlockchainLogs();
+      } else if (tab === 'network') {
+        el.innerHTML = `
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:0.25rem">Network Anomaly Detection</h2>
+      <p style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem">Real-time network topology and anomaly visualization</p>
+      <div class="network-vis" id="netVis">
+        <div class="net-center">CORE</div>
+      </div>
+      <div class="dash-panels" style="margin-top:1rem">
+        <div class="panel"><div class="panel-title">Anomaly Detections <span>Last 1h</span></div>${[{ sev: 'high', label: 'HIGH', title: 'Lateral Movement: PLC→HMI', time: '8 min ago' }, { sev: 'critical', label: 'CRITICAL', title: 'Beaconing Pattern Detected', time: '15 min ago' }, { sev: 'medium', label: 'MEDIUM', title: 'Port Scan from 10.4.2.31', time: '29 min ago' }].map(i => `<div class="incident-item"><span class="severity-badge sev-${i.sev}">${i.label}</span><div class="incident-info"><h4>${i.title}</h4><p>${i.time}</p></div></div>`).join('')}</div>
+        <div class="panel"><div class="panel-title">Protocol Distribution</div>${[['Modbus TCP', '38%', 'var(--amber)'], ['EtherNet/IP', '24%', 'var(--teal)'], ['DNP3', '18%', '#669399'], ['OPC-UA', '12%', 'var(--text3)'], ['Other', '8%', 'var(--dark-red)']].map(([p, v, c]) => `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:0.78rem;font-family:'Space Mono',monospace;color:var(--text2)">${p}</span><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px"><div style="height:100%;width:${v};background:${c};border-radius:2px"></div></div><span style="font-size:0.72rem;color:var(--text3);font-family:'Space Mono',monospace;min-width:28px">${v}</span></div></div>`).join('')}</div>
+      </div>`;
+        buildNetworkVis();
+      } else if (tab === 'incidents') {
+        el.innerHTML = `
+      <div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between"><div><h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800">Incident Management</h2><p style="font-size:0.8rem;color:var(--text3);margin-top:2px">Active and recent security incidents • Click to expand details</p></div><span class="severity-badge sev-critical" style="font-size:0.75rem;padding:5px 12px">3 Critical Open</span></div>
+      <div class="panel" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        ${incidents.map((inc, idx) => `<div><div class="incident-item" style="padding:0.85rem 0" onclick="toggleIncidentDetail('inc-full-${idx}')"><div style="display:flex;align-items:flex-start;gap:0.75rem;width:100%"><span class="severity-badge sev-${inc.sev}">${inc.label}</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><h4 style="font-size:0.83rem;font-weight:600;color:var(--text)">${inc.title}</h4><span style="font-size:0.68rem;color:var(--text3);font-family:'Space Mono',monospace">${inc.time}</span></div><p style="font-size:0.72rem;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">${inc.device} • ${inc.id}</p></div></div></div><div class="incident-detail" id="inc-full-${idx}"><h5>Investigation Summary</h5><p>${inc.detail}</p><h5 style="margin-top:0.75rem">Recommended Actions</h5><ul>${inc.actions.map(a => '<li>' + a + '</li>').join('')}</ul></div></div>`).join('')}
+      </div>`;
+      } else if (tab === 'intel') {
+        el.innerHTML = `
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:0.25rem">Threat Intelligence Feed</h2>
+      <p style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem">AI-curated threat intel and predictive attack analytics</p>
+      <div class="dash-kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kpi-card"><div class="kpi-label">Active IOCs</div><div class="kpi-val amber">1,284</div><div class="kpi-sub">Indicators of Compromise</div></div>
+        <div class="kpi-card"><div class="kpi-label">Attack Predictions</div><div class="kpi-val red">4</div><div class="kpi-sub down">High confidence vectors</div></div>
+        <div class="kpi-card"><div class="kpi-label">Intel Sources</div><div class="kpi-val teal">12</div><div class="kpi-sub up">Feeds active</div></div>
+      </div>
+      <div class="panel" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-top:1rem"><div class="panel-title">Predicted Attack Vectors <span>Next 24h, AI-ranked</span></div>
+        ${[{ title: 'Spear Phishing → OT Pivot', conf: '89%', target: 'SCADA Layer', sev: 'critical' }, { title: 'Ransomware via Exposed RDP', conf: '74%', target: 'Historian DB', sev: 'high' }, { title: 'Supply Chain Firmware Injection', conf: '61%', target: 'IoT Sensors', sev: 'high' }, { title: 'DNS Tunneling for C2', conf: '47%', target: 'Network Edge', sev: 'medium' }].map(i => `<div class="incident-item"><span class="severity-badge sev-${i.sev}" style="min-width:60px;text-align:center">${i.conf}</span><div class="incident-info"><h4>${i.title}</h4><p>Target: ${i.target}</p></div></div>`).join('')}
+      </div>`;
+      } else if (tab === 'devices') {
+        el.innerHTML = `
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:1rem">Asset Inventory</h2>
+      <div class="device-list">${[['PLC-004', 'Siemens S7-300', 'OT Zone A', 'ds-critical', '⚠ Critical'], ['SCADA-HMI-01', 'Wonderware InTouch', 'Control Room', 'ds-critical', '⚠ Critical'], ['IoT-Sensor-12', 'Phoenix Contact', 'Plant Floor', 'ds-warn', '⚡ Warning'], ['Router-OT-7', 'Hirschmann EAGLE', 'Network Edge', 'ds-warn', '⚡ Warning'], ['Camera-Grid-03', 'Axis P3245', 'Perimeter', 'ds-ok', '✓ Online'], ['Historian-DB', 'OSIsoft PI', 'Data Center', 'ds-ok', '✓ Online'], ['Firewall-OT-1', 'Fortinet FortiGate', 'DMZ', 'ds-ok', '✓ Online'], ['Switch-Core-2', 'Cisco Catalyst', 'Network Core', 'ds-ok', '✓ Online']].map(([n, t, z, s, l]) => `<div class="device-item"><div><span class="device-name">${n}</span><span style="font-size:0.7rem;color:var(--text3);margin-left:10px">${t} • ${z}</span></div><span class="device-status ${s}">${l}</span></div>`).join('')}</div>`;
+      } else if (tab === 'policy') {
+        el.innerHTML = `
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:1rem">Policy & Access Control</h2>
+      <div class="dash-panels">
+        <div class="panel"><div class="panel-title">Active Roles</div>${[['SOC Analyst', 'Full incident access, read-only assets', 'teal'], ['Plant Manager', 'Risk summary, device status only', 'amber'], ['Security Admin', 'Full platform access, policy management', 'amber'], ['OT Technician', 'Device health, no incident data', 'teal'], ['Executive', 'Dashboard summary, no raw logs', 'text3']].map(([r, p, c]) => `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><p style="font-size:0.8rem;font-weight:600;color:var(--${c})">${r}</p><p style="font-size:0.72rem;color:var(--text3);margin-top:2px">${p}</p></div>`).join('')}</div>
+        <div class="panel"><div class="panel-title">Recent Audit Events</div>${[['SOC-Analyst-1 logged in', '3 min ago'], ['Policy updated: Alert threshold', '12 min ago'], ['Failed auth: admin@192.168.4.5', '28 min ago'], ['New device registered: PLC-009', '1h ago'], ['Role escalation: SysAdmin granted', '2h ago']].map(([e, t]) => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between"><p style="font-size:0.75rem;color:var(--text2)">${e}</p><p style="font-size:0.7rem;color:var(--text3);font-family:'Space Mono',monospace">${t}</p></div>`).join('')}</div>
+      </div>`;
+      }
+    }
+
+    function startBlockchainLogs() {
+      if (bcInterval) clearInterval(bcInterval);
+      const ledger = document.getElementById('bcLedger');
+      if (!ledger) return;
+
+      const devices = ['PLC-004', 'IoT-Sensor-12', 'SCADA-HMI-01', 'Router-OT-7'];
+      let txCount = 0;
+
+      const addRow = () => {
+        if (txCount > 50) { ledger.innerHTML = ''; txCount = 0; }
+        const d = devices[Math.floor(Math.random() * devices.length)];
+        const hash = Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+        const row = document.createElement('div');
+        row.className = 'bc-row';
+        row.innerHTML = `<span style="width:80px">${d}</span><span style="color:#7EC8A0">Encrypted</span><span class="bc-hash">0x${hash}</span>`;
+        ledger.prepend(row);
+        txCount++;
+      };
+      for(let i=0; i<4; i++) addRow();
+      bcInterval = setInterval(addRow, 1500);
+    }
+
+    function buildNetworkVis() {
+      const el = document.getElementById('netVis');
+      if (!el) return;
+      const nodes = [
+        { x: 50, y: 50, bg: 'var(--amber2)', label: 'PLC' },
+        { x: 75, y: 35, bg: 'var(--amber)', label: 'HMI' },
+        { x: 25, y: 35, bg: 'var(--teal)', label: 'RTU' },
+        { x: 80, y: 65, bg: '#E05533', label: 'IOT' },
+        { x: 20, y: 65, bg: 'var(--teal)', label: 'NET' },
+        { x: 55, y: 80, bg: 'var(--text3)', label: 'CAM' },
+        { x: 40, y: 20, bg: 'var(--amber)', label: 'SCA' },
+      ];
+      nodes.forEach((n, i) => {
+        const d = document.createElement('div');
+        d.style.cssText = `position:absolute;left:${n.x}%;top:${n.y}%;transform:translate(-50%,-50%);width:34px;height:34px;background:${n.bg}22;border:1.5px solid ${n.bg};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-family:'Space Mono',monospace;color:${n.bg};font-weight:700;animation:nodeFloat ${3 + i * 0.4}s ease-in-out infinite ${i * 0.2}s`;
+        d.textContent = n.label;
+        el.appendChild(d);
+      });
+    }
+
+    // ===== SIMULATE LIVE THREAT CARD UPDATES =====
+    setInterval(() => {
+      const cards = document.querySelectorAll('.threat-card');
+      if (cards.length) {
+        const i = Math.floor(Math.random() * cards.length);
+        cards[i].style.opacity = '0.5';
+        setTimeout(() => { cards[i].style.opacity = '1' }, 300);
+      }
+    }, 3000);
+
+    // ===== AI CHATBOT =====
+    let chatOpen = false;
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      document.getElementById('chatPanel').classList.toggle('open', chatOpen);
+      document.getElementById('chatFab').style.display = chatOpen ? 'none' : 'flex';
+      if (chatOpen) document.getElementById('chatInput').focus();
+    }
+
+    const chatKB = [
+      { keys: ['what is sentinelx', 'about sentinelx', 'tell me about', 'what does sentinelx do'], answer: 'SentinelX is an AI-powered industrial cybersecurity platform designed for OT/ICS environments. It combines threat detection, SOC dashboards, IoT vulnerability scanning, network anomaly detection, and predictive analytics into a unified security command center. Our platform helps factories, utilities, and critical infrastructure operators detect threats early, understand risk, and respond faster.' },
+      { keys: ['ot security', 'ot vs it', 'difference between ot and it'], answer: 'OT (Operational Technology) security focuses on protecting industrial control systems like PLCs, SCADA, and HMIs — systems that directly control physical processes. Unlike IT security, OT environments prioritize availability over confidentiality, have legacy devices that can\'t be easily patched, use specialized protocols like Modbus and DNP3, and require zero-downtime operations. A single security failure in OT can cause physical damage, environmental harm, or safety incidents.' },
+      { keys: ['ics threat', 'common ics', 'industrial threat', 'scada threat', 'common threats'], answer: 'Common ICS/SCADA threats include: 1) **Unauthorized access** to control systems via weak authentication; 2) **Ransomware attacks** targeting historian databases and HMI systems; 3) **Man-in-the-middle attacks** on unencrypted industrial protocols like Modbus; 4) **Supply chain compromises** through infected firmware updates; 5) **Insider threats** from disgruntled employees with plant access; 6) **APT campaigns** like TRITON/TRISIS specifically designed to target safety systems.' },
+      { keys: ['anomaly detection', 'how does anomaly', 'ml detection', 'ai detection'], answer: 'SentinelX\'s anomaly detection uses ML models trained on baseline OT/IoT behavioral patterns. Here\'s how it works: 1) **Baseline Learning** — we profile normal traffic patterns, device communication cadences, and protocol behaviors; 2) **Real-time Scoring** — every network flow and device action is scored against the baseline; 3) **Deviation Flagging** — statistical outliers are flagged with severity scores from 0-10; 4) **Context Enrichment** — alerts are enriched with device info, CVE data, and historical patterns; 5) **Priority Ranking** — ML ranks alerts by business impact, reducing analyst fatigue.' },
+      { keys: ['soc dashboard', 'what is soc', 'security operations'], answer: 'A SOC (Security Operations Center) Dashboard is the central nerve center for security monitoring. SentinelX\'s SOC Dashboard provides: real-time incident feeds with severity classification, device health monitoring across all OT/IoT assets, threat activity trend charts, KPI cards for key security metrics, and expandable incident details with investigation context and recommended actions. It\'s designed to give analysts a single-pane-of-glass view across the entire industrial environment.' },
+      { keys: ['vulnerability', 'iot vulnerability', 'vulnerability scanner', 'iot scanner'], answer: 'SentinelX\'s IoT Vulnerability Scanner continuously assesses connected devices for: outdated firmware with known CVEs, hardcoded or default credentials, open debug ports and unnecessary services, weak encryption protocols (TLS 1.0, cleartext), misconfigured network settings, and end-of-life software without patches. Each device receives a risk score (0-10) so teams can prioritize remediation where it matters most.' },
+      { keys: ['modbus', 'protocol', 'dnp3', 'opc', 'industrial protocol'], answer: 'Industrial protocols like Modbus TCP, DNP3, and OPC-UA are the communication backbone of OT environments. **Modbus** is widely used but lacks authentication and encryption — making it vulnerable to spoofing and replay attacks. **DNP3** is common in utilities and offers some security features. **OPC-UA** is the most modern with built-in security. SentinelX monitors traffic across all these protocols to detect anomalous commands, unauthorized writes, and suspicious communication patterns.' },
+      { keys: ['plc', 'what is a plc', 'programmable logic'], answer: 'A PLC (Programmable Logic Controller) is a ruggedized industrial computer used to control manufacturing processes — from assembly lines to chemical reactors. PLCs read sensor inputs and execute logic to control actuators, valves, and motors. They are critical targets because compromising a PLC can directly manipulate physical processes, potentially causing equipment damage, product defects, or safety hazards. SentinelX monitors PLC communication patterns to detect unauthorized register reads/writes.' },
+      { keys: ['scada', 'what is scada'], answer: 'SCADA (Supervisory Control and Data Acquisition) systems provide centralized monitoring and control over distributed industrial processes. SCADA systems include HMI (Human-Machine Interface) screens, communication infrastructure, and remote terminal units. They\'re used in power grids, water treatment, oil & gas, and manufacturing. SCADA security is critical because these systems often span large geographic areas, use legacy protocols, and control essential infrastructure.' },
+      { keys: ['risk score', 'how is risk calculated', 'risk assessment'], answer: 'SentinelX calculates risk scores using a multi-factor model: **Vulnerability Score** (based on CVE severity and device exposure) × **Threat Likelihood** (based on active threat intelligence and attack patterns) × **Business Impact** (based on device criticality and operational role). The composite score (0-10) gives executives a clear, actionable view of their security posture without needing deep technical expertise.' },
+      { keys: ['book demo', 'demo', 'get started', 'how to start', 'pricing'], answer: 'You can book a demo of SentinelX right from our landing page! Click the "Book a Demo" button in the hero section or navigate to the demo booking form. Fill in your name, email, organization, and role — and you\'ll be redirected to the full platform dashboard where you can explore all features including the SOC Dashboard, IoT Scanner, Network Monitor, and Threat Intelligence feed.' },
+      { keys: ['help', 'what can you do', 'capabilities', 'features'], answer: 'I can help you with: 🛡️ **SentinelX Features** — learn about our platform modules and capabilities; 🔒 **OT/ICS Security** — understand industrial cybersecurity concepts; ⚠️ **Threat Intelligence** — learn about common ICS threats and attack vectors; 📊 **SOC Workflows** — understand security operations and incident response; 🔍 **Vulnerability Assessment** — learn about IoT and device security; 📱 **Industrial Protocols** — Modbus, DNP3, OPC-UA and their security implications. Just ask me anything!' },
+      { keys: ['zero trust', 'zero-trust'], answer: 'Zero Trust is a security model where no user, device, or network segment is trusted by default — every access request must be verified. In industrial environments, SentinelX applies zero-trust principles by: continuously validating device identity and behavior, enforcing least-privilege access to control systems, monitoring all east-west traffic within OT segments, requiring authentication for every protocol interaction, and logging all actions for audit trails.' },
+      { keys: ['incident response', 'how to respond', 'what to do when'], answer: 'Effective ICS incident response follows these steps: 1) **Detection** — SentinelX flags anomalous behavior with severity scores; 2) **Triage** — analysts review context, affected devices, and business impact; 3) **Containment** — isolate affected segments without disrupting critical operations; 4) **Investigation** — analyze logs, traffic captures, and device states; 5) **Remediation** — patch vulnerabilities, reset credentials, update policies; 6) **Recovery** — restore normal operations and verify system integrity; 7) **Lessons Learned** — update detection rules and response playbooks.' },
+    ];
+
+    function findChatResponse(msg) {
+      const lower = msg.toLowerCase().trim();
+      for (const kb of chatKB) {
+        for (const key of kb.keys) {
+          if (lower.includes(key)) return kb.answer;
+        }
+      }
+      // Fuzzy fallback — check for any keyword overlap
+      const words = lower.split(/\s+/);
+      let bestMatch = null, bestScore = 0;
+      for (const kb of chatKB) {
+        let score = 0;
+        for (const key of kb.keys) {
+          const keyWords = key.split(/\s+/);
+          for (const w of words) {
+            if (w.length > 2 && keyWords.some(kw => kw.includes(w) || w.includes(kw))) score++;
+          }
+        }
+        if (score > bestScore) { bestScore = score; bestMatch = kb; }
+      }
+      if (bestScore >= 2) return bestMatch.answer;
+      return "That's a great question! While I don't have a specific answer for that in my current knowledge base, I'd recommend booking a demo with our team for a detailed walkthrough. You can also explore the SentinelX platform dashboard to see our capabilities in action. Try asking about: OT security, anomaly detection, ICS threats, SCADA, PLCs, or SentinelX features!";
+    }
+
+    function addChatMsg(text, type) {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + type;
+      div.innerHTML = text;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+      input.value = '';
+      addChatMsg(msg, 'user');
+      // Hide quick replies after first message
+      document.getElementById('chatQuickReplies').style.display = 'none';
+      // Show typing indicator
+      const typing = document.getElementById('chatTyping');
+      typing.classList.add('show');
+      document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+      // Simulate response delay
+      setTimeout(() => {
+        typing.classList.remove('show');
+        const response = findChatResponse(msg);
+        addChatMsg(response, 'bot');
+      }, 800 + Math.random() * 1200);
+    }
+
+    function sendQuickReply(btn) {
+      const msg = btn.textContent;
+      document.getElementById('chatInput').value = msg;
+      sendChat();
+    }
+  </script>
+</body>
+
+</html>
