@@ -40,6 +40,7 @@ Uses AI-assisted risk modeling to forecast likely attack paths, exposure trends,
 
 ### 6) AI CHATBOT
 AI Assistant help Security Operations Managers,SOC Analysts,CISOs/CIOs,Plant Operations Leaders,Industrial Security Teams,Critical Infrastructure Operators to identify the industrial threats and analyse accordingly.
+
 ---
 
 ## 🧭 Product Highlights
