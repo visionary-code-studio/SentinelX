@@ -60,8 +60,6 @@ Uses AI-assisted risk modeling to forecast likely attack paths, exposure trends,
 > Add your screenshots here for a stronger GitHub presentation.
 
 | Landing Page | Dashboard Preview |
-|---|---|<img width="1024" height="1024" alt="logo" src="https://github.com/user-attachments/assets/abc26aae-f95b-48c7-9a43-016592e0ca99" /><img width="1536" height="1024" alt="eacddba5-d278-4bf5-b4e4-a04200175f10" src="https://github.com/user-attachments/assets/1b2e0728-e2c8-480f-bbd4-827908b8d389" />
-
 | `./assets/home-preview.png` | `./assets/dashboard-preview.png` |
 
 ---
