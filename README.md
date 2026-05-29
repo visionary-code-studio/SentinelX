@@ -61,9 +61,13 @@ AI Assistant help Security Operations Managers,SOC Analysts,CISOs/CIOs,Plant Ope
 
 > Add your screenshots here for a stronger GitHub presentation.
 
-| Landing Page | Dashboard Preview |
+| Landing Page | 
 
-|<img width="1352" height="634" alt="Landing_Page" src="https://github.com/user-attachments/assets/b113811d-7fc4-4b75-9815-dcf374b14597" />|                                                                                                                      | `./assets/dashboard-preview.png` |
+<img width="1352" height="634" alt="Landing_Page" src="https://github.com/user-attachments/assets/b113811d-7fc4-4b75-9815-dcf374b14597" />     
+
+|Dashboard Preview |
+<img width="1350" height="629" alt="Dashboard" src="https://github.com/user-attachments/assets/e1871246-642c-49c9-9972-63bcdba7950c" />
+
 
 ---
 
