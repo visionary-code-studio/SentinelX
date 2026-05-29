@@ -60,7 +60,7 @@ Uses AI-assisted risk modeling to forecast likely attack paths, exposure trends,
 > Add your screenshots here for a stronger GitHub presentation.
 
 | Landing Page | Dashboard Preview |
-| `./assets/home-preview.png` | `./assets/dashboard-preview.png` |
+| `./Landing_Page.png` | `./assets/dashboard-preview.png` |
 
 ---
 
@@ -162,4 +162,4 @@ A dedicated legal page covering:
 
 ---
 ### @ Powered by SentinelX-Industrial Cybersecurity Intelligence Platform                                                              
-<img width="1352" height="634" alt="Landing_Page"src="https://github.com/user-attachments/assets/d2aef621-1f92-40eb-bc67-abedd8a4c89e" />
+
